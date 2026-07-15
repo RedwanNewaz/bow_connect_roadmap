@@ -10,7 +10,34 @@ MotionTree<State>::MotionTree(double origin_x, double origin_y, double grid_size
         : origin_x_(origin_x), origin_y_(origin_y), grid_size_(grid_size) {}
 
 template<class State>
+void MotionTree<State>::setVelocityBounds(double v_min, double v_max, double w_min, double w_max) {
+    v_min_ = v_min;
+    v_max_ = v_max;
+    w_min_ = w_min;
+    w_max_ = w_max;
+}
+
+template<class State>
+bool MotionTree<State>::isDynamicsValid(const State& s) const {
+    // Only 5D states (x, y, theta, v, w) carry velocity information
+    if (s.size() < 5) return true;
+
+    const double v = s(3);
+    const double w = s(4);
+    return v >= v_min_ && v <= v_max_ && w >= w_min_ && w <= w_max_;
+}
+
+template<class State>
 int MotionTree<State>::addState(const State& state, int parent_idx) {
+    // --- Dynamics Validity Check ---
+    // A state violating the velocity bounds cannot join the tree, and a node
+    // violating them cannot be selected as a parent.
+    if (!isDynamicsValid(state))
+        return -1;
+    if (parent_idx >= 0 && parent_idx < static_cast<int>(nodes_.size()) &&
+        !isDynamicsValid(nodes_[parent_idx].state))
+        return -1;
+
     size_t h = hashState(state);
 
     if (state_to_idx_.find(h) != state_to_idx_.end()) {
@@ -45,10 +72,13 @@ std::vector<State> MotionTree<State>::getTrajectory(int goal_idx) const {
 int MotionTree<State>::findNearestNode(const State& query) const {
     if (nodes_.empty()) return -1;
 
-    int best_idx = 0;
-    double best_dist = (nodes_[0].state.template head<2>() - query.template head<2>()).squaredNorm();
+    int best_idx = -1;
+    double best_dist = std::numeric_limits<double>::infinity();
 
-    for (size_t i = 1; i < nodes_.size(); ++i) {
+    for (size_t i = 0; i < nodes_.size(); ++i) {
+        // Skip nodes violating the velocity bounds when selecting a parent
+        if (!isDynamicsValid(nodes_[i].state)) continue;
+
         double dist = (nodes_[i].state.template head<2>() - query.template head<2>()).squaredNorm();
         if (dist < best_dist) {
             best_dist = dist;

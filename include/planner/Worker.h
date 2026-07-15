@@ -31,6 +31,11 @@ public:
         double origin_x = origin[0];
         double origin_y = origin[1];
         motion_tree_ = std::make_unique<MotionTree<State>>(origin_x, origin_y, grid_size);
+        // Velocity bounds from param.yaml (min_yawrate = -max_yawrate)
+        double max_speed   = pm_->get_param<double>("max_speed");
+        double min_speed   = pm_->get_param<double>("min_speed");
+        double max_yawrate = pm_->get_param<double>("max_yawrate");
+        motion_tree_->setVelocityBounds(min_speed, max_speed, -max_yawrate, max_yawrate);
         motion_tree_->addState(start_state, -1);
         // Create a MotionModel based on available parameters
         std::shared_ptr<MotionModel<State, Control>> mm;
@@ -80,7 +85,11 @@ public:
         const Traj planner_result = planner_->getFinalResultCopy();
 
         for(size_t i = sync_counter_; i < planner_result.size(); i++){
-            parent_index_ = motion_tree_->addState(planner_result[i], parent_index_);
+            int idx = motion_tree_->addState(planner_result[i], parent_index_);
+            // Skip dynamically invalid states (rejected by the velocity-bound
+            // check) instead of resetting the parent chain to the root
+            if (idx >= 0)
+                parent_index_ = idx;
             ++sync_counter_;
         }
     }

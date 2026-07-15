@@ -30,6 +30,6 @@ to_obstacle_cost_gain: 0.16
 speed_cost_gain: 1.0
 # connection_radius: 0.345
 # connect_interval: 0.3
-wheel_base: 0.2
+wheel_base: 0.5
 obstacles: []
 

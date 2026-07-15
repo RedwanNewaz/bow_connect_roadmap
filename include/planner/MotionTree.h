@@ -5,6 +5,7 @@
 #ifndef MOTIONPLANNERBENCHMARK_MOTIONTREE_H
 #define MOTIONPLANNERBENCHMARK_MOTIONTREE_H
 #include "BOW.h"
+#include <limits>
 
 
 namespace bow{
@@ -21,6 +22,7 @@ public:
     const State& getState(int idx) const;
     size_t size() const { return nodes_.size(); }
     int getIndex(const State& state) const ;
+    void setVelocityBounds(double v_min, double v_max, double w_min, double w_max);
 
     static std::vector<State> optimize_traj(const std::vector<State>& traj, double origin_x, double origin_y, double grid_size);
 
@@ -37,7 +39,15 @@ private:
     double origin_y_;
     double grid_size_;
 
+    // Velocity bounds for the 5D UGV state (x, y, theta, v, w).
+    // Default to unbounded so trees without dynamics info (e.g. optimize_traj) are unaffected.
+    double v_min_ = -std::numeric_limits<double>::infinity();
+    double v_max_ =  std::numeric_limits<double>::infinity();
+    double w_min_ = -std::numeric_limits<double>::infinity();
+    double w_max_ =  std::numeric_limits<double>::infinity();
+
     std::size_t hashState(const State& s) const;
+    bool isDynamicsValid(const State& s) const;
 };
 
 
