@@ -1,0 +1,50 @@
+map_resolution: 0.019375
+name: "sr_clutter_04"
+map_image_path: "../test/ugv/sr_clutter_04.png"
+map_inflation: 17
+color_threshold: 200
+start: [-14.501875, -2.003438, 0.938047]
+goal: [-3.501875, -17.003437]
+origin: [-16.00375, -19.006876]
+boundary: [-16.00375, 16.00375, -19.006876, 19.006876]
+robot_radius: 0.345
+goal_radius: 0.3
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 0.6981
+predict_time: 3.0
+dt: 0.1
+pref_speed_index: 5
+num_samples: 5
+obstacle_length: 0.5
+collision_checker: occupancy
+
+max_accel: 0.2
+max_dyawrate: 2.0472
+v_reso: 0.013
+yawrate_reso: 0.091745329
+to_goal_cost_gain: 0.3
+to_obstacle_cost_gain: 0.16
+speed_cost_gain: 1.0
+solver_time: 10.0
+obstacles:
+  - [4.11, -0.92]
+  - [2.96, -6.09]
+  - [3.92, 4.29]
+  - [-0.74, -1.94]
+  - [-4.09, 0.82]
+  - [4.91, 1.97]
+  - [-2.18, 7.06]
+  - [-5.19, 2.75]
+  - [-0.94, 4.99]
+  - [-0.62, 1.03]
+  - [2.02, 0.8]
+  - [-7.04, -0.95]
+  - [5.3, -3.99]
+  - [-6.16, -6.15]
+  - [2.0, 6.0]
+  - [-4.35, -6.28]
+  - [-5.1, -4.99]
+  - [0.87, 3.72]
+  - [0.84, -5.13]
+  - [-3.86, -1.91]

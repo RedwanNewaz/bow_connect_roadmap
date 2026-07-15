@@ -1,0 +1,36 @@
+map_resolution: 0.019875
+name: "sr_wall_01"
+map_image_path: "../test/ugv/sr_wall_01.png"
+map_inflation: 8
+color_threshold: 200
+start: [-15.499687, -0.996562, 1.570796]
+goal: [-15.499687, -10.996562]
+origin: [-15.999374, -16.993124]
+boundary: [-15.999374, 15.999374, -16.993124, 16.993124]
+robot_radius: 0.345
+goal_radius: 0.3
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 0.6981
+predict_time: 3.0
+dt: 0.1
+pref_speed_index: 5
+num_samples: 5
+obstacle_length: 7.5
+
+
+solver_time: 5.0
+collision_checker: occupancy
+max_accel: 0.5
+max_dyawrate: 2.0472
+v_reso: 0.013
+yawrate_reso: 0.091745329
+
+to_goal_cost_gain: 0.3
+to_obstacle_cost_gain: 0.16
+speed_cost_gain: 1.0
+connection_radius: 0.345
+connect_interval: 0.3
+wheel_base: 1.0
+obstacles: []
+

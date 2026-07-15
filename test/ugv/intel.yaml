@@ -1,0 +1,34 @@
+map_resolution: 0.05
+name: "intel"
+map_image_path: "../test/ugv/intel_map.png"
+map_inflation: 8
+color_threshold: 200
+start: [-18.24, 17.65, 1.5707]
+goal: [8.86, -16.54]
+boundary: [-23.175, 23.175, -23.15, 23.15]
+origin: [-23.175, -23.15]
+robot_radius: 0.345
+goal_radius: 0.3
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 0.6981
+predict_time: 5.0
+dt: 0.1
+pref_speed_index: 10
+num_samples: 5
+obstacle_length: 0.25
+obstacles: []
+solver_time: 60.0
+collision_checker: occupancy
+# wheel_base: 0.49
+# wheel_base: 1.5
+state_dim: 5
+
+# DWA parameters
+max_accel: 0.2
+max_dyawrate: 2.0472
+v_reso: 0.013
+yawrate_reso: 0.091745329
+to_goal_cost_gain: 0.3
+to_obstacle_cost_gain: 0.16
+speed_cost_gain: 1.0

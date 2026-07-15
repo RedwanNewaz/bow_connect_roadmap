@@ -1,0 +1,35 @@
+map_resolution: 0.025
+name: "sr_nonconvex_02"
+map_image_path: "../test/ugv/sr_nonconvex_02.png"
+map_inflation: 13
+color_threshold: 200
+start: [-14.110001, -5.47, 0.469132]
+goal: [-3.200001, -11.0]
+origin: [-20.0, -20.0]
+boundary: [-20.0, 20.0, -20.0, 20.0]
+robot_radius: 0.345
+goal_radius: 0.3
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 0.6981
+predict_time: 3.0
+dt: 0.1
+pref_speed_index: 7
+num_samples: 5
+collision_checker: occupancy
+
+wheel_base: 0.69
+
+max_accel: 0.2
+max_dyawrate: 2.0472
+v_reso: 0.013
+yawrate_reso: 0.091745329
+to_goal_cost_gain: 0.3
+to_obstacle_cost_gain: 0.16
+speed_cost_gain: 1.0
+
+solver_time: 30.0
+state_dim: 5
+
+obstacle_length: 0.25
+obstacles: []

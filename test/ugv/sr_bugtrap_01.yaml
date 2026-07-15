@@ -1,0 +1,32 @@
+map_resolution: 0.0225
+name: "sr_bugtrap_01"
+map_image_path: "../test/ugv/sr_bugtrap_01.png"
+map_inflation: 15
+color_threshold: 200
+start: [-16.0, -11.37125, 0.033592]
+goal: [-6.18, -11.70125]
+origin: [-18.0, -20.002501]
+boundary: [-18.0, 18.0, -20.002501, 20.002501]
+robot_radius: 0.345
+goal_radius: 0.3
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 0.6981
+predict_time: 3.0
+dt: 0.1
+pref_speed_index: 7
+num_samples: 5
+obstacle_length: 0.5
+solver_time: 5.0
+wheel_base: 0.69
+collision_checker: occupancy
+state_dim: 5
+# DWA parameters
+max_accel: 0.5
+max_dyawrate: 2.0472
+v_reso: 0.013
+yawrate_reso: 0.051745329
+to_goal_cost_gain: 0.3
+to_obstacle_cost_gain: 0.16
+speed_cost_gain: 1.0
+obstacles: []

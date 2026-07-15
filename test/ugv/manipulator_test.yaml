@@ -1,0 +1,32 @@
+robot_type: manipulator
+collision_checker: occupancy
+num_samples: 20
+solver_time: 10.0
+dt: 0.1
+predict_time: 1.0
+goal_radius: 0.05
+robot_radius: 0.05
+pref_speed_index: 10
+max_speed: 1.0
+min_speed: 0.0
+max_yawrate: 1.57
+max_dyawrate: 1.0
+
+# Manipulator specific params
+arm_dq_max: 1.0
+arm_ddq_max: 0.5
+arm_q_min: [-3.14, -1.57, -1.57, -3.14, -1.57, -3.14]
+arm_q_max: [3.14, 1.57, 1.57, 3.14, 1.57, 3.14]
+
+# [q1, q2, q3, q4, q5, q6, dq1, dq2, dq3, dq4, dq5, dq6]
+start: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+# EE Target [x, y, z]
+goal: [0.2, 0.0, 0.3]
+
+# Env
+origin: [-5.0, -5.0]
+map_file: "intel_map.png"
+map_resolution: 0.05
+robot_size: 0.1
+collision_threshold: 127
