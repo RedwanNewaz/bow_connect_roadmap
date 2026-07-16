@@ -20,10 +20,12 @@ sudo apt install build-essential cmake git \
     libeigen3-dev libyaml-cpp-dev libnlopt-dev libnlopt-cxx-dev
 ```
 
-#### Python (trajectory visualization)
+#### Python (bindings, visualization, roadmap examples)
+
+All Python dependencies (`numpy`, `matplotlib`, `pyyaml`, `networkx`, `pybind11`) are declared in `pyproject.toml`:
 
 ```bash
-pip install numpy matplotlib pyyaml
+pip install -e .
 ```
 
 ### 2. Build the Project
@@ -32,6 +34,8 @@ pip install numpy matplotlib pyyaml
 cmake -B build
 cmake --build build -j$(nproc)
 ```
+
+This builds the `bow_connect_parallel` executable and, when pybind11 is available, the `bow_connect` Python module (`build/bow_connect.cpython-*.so`). Set `-DBUILD_PYTHON_BINDINGS=OFF` to skip the module.
 
 ---
 
@@ -48,6 +52,47 @@ The script:
 1. Runs the `bow_connect_parallel` planner from `build/` on the given environment
 2. Writes the solution trajectory to `build/trajectory.csv`
 3. Plots the trajectory over the environment map with `traj_viewer.py`
+
+---
+
+## 🐍 Python Bindings
+
+The `bow_connect` module wraps the planner for Python. The constructor takes an environment YAML config, and `plan()` takes start/goal configurations and returns the solution trajectory as a NumPy array:
+
+```python
+import bow_connect
+
+planner = bow_connect.BOWConnectPlanner("../test/ugv/sr_clutter_01.yaml")
+
+traj = planner.plan(
+    start=[-11.5, -1.00375, 0.785398],  # x, y, theta
+    goal=[-1.5, -11.00375],             # x, y
+    solver_time=30.0,                   # seconds; <= 0 uses config value
+    optimize=True,                      # shortcut/smooth the raw trajectory
+    verbose=False,
+)
+# traj: numpy array of shape (N, 5), rows are [x, y, theta, v, omega]
+```
+
+`plan()` raises `RuntimeError` if no solution is found within the time budget. The GIL is released while the planner's worker threads run.
+
+### Examples
+
+Run the examples from the `python/` directory (map paths in the configs are relative to it):
+
+```bash
+cd python
+
+# Plan once and visualize the trajectory with traj_viewer.py
+python3 example.py [--env ../test/ugv/sr_clutter_01.yaml] [--output traj.png]
+
+# Run the planner n times and merge all trajectories into a roadmap graph
+python3 roadmap_example.py -n 8 --solver-time 10 [--output roadmap.png]
+```
+
+`roadmap_example.py` builds a Python analogue of `bow::MotionTree` (`src/planner/MotionTree.cpp`): every state is snapped to a grid cell (cell size = `robot_radius`, like `MotionTree::hashState`) so overlapping trajectories share nodes, and consecutive states become weighted edges of a `networkx` graph. Dijkstra then extracts the shortest start-to-goal path through the combined roadmap:
+
+![Roadmap built from 8 planner runs on sr_clutter_01](python/roadmap_example.png)
 
 ---
 

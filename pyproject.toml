@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bow-connect"
+version = "0.1.0"
+description = "Python tooling for the BOWConnect motion planner: bindings examples, trajectory viewer, and roadmap builder"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+    "networkx>=3.0",
+    # Needed to configure/build the C++ bow_connect module (CMake finds it
+    # via `python3 -m pybind11 --cmakedir`); >=2.12 for NumPy 2.x support.
+    "pybind11>=2.12",
+]
+
+# Dependency-only project: the C++ extension is built by the repo's CMake
+# (target `bow_connect`), and the example scripts are run in place.
+# Install the dependencies with:  pip install -e .
+[tool.setuptools]
+py-modules = []

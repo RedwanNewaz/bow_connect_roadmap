@@ -31,3 +31,32 @@ target_link_libraries(bow_connect_parallel
     Eigen3::Eigen
     -lnlopt_cxx
 )
+
+option(BUILD_PYTHON_BINDINGS "Build the bow_connect Python module" ON)
+if(BUILD_PYTHON_BINDINGS)
+    # Prefer the pybind11 that ships with the Python interpreter (pip install pybind11);
+    # the distro package can be too old for this CMake version.
+    find_package(Python3 COMPONENTS Interpreter Development QUIET)
+    if(Python3_Interpreter_FOUND)
+        execute_process(
+            COMMAND ${Python3_EXECUTABLE} -m pybind11 --cmakedir
+            OUTPUT_VARIABLE PYBIND11_CMAKE_DIR
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        if(PYBIND11_CMAKE_DIR)
+            list(PREPEND CMAKE_PREFIX_PATH ${PYBIND11_CMAKE_DIR})
+        endif()
+    endif()
+    find_package(pybind11 CONFIG QUIET)
+    if(pybind11_FOUND)
+        pybind11_add_module(bow_connect python/bindings.cpp ${SRC_FILES})
+        target_link_libraries(bow_connect PRIVATE
+            yaml-cpp::yaml-cpp
+            Eigen3::Eigen
+            -lnlopt_cxx
+        )
+    else()
+        message(STATUS "pybind11 not found - skipping Python bindings")
+    endif()
+endif()

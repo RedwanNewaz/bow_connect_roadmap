@@ -49,9 +49,13 @@ class TrajectoryVisualizer:
         return traj
 
     def __call__(self, args, **kwds):
-
-        config = self.config
         traj = self.load_trajectory(args.result)
+        self.show(traj, output=args.output)
+
+    def show(self, traj, output=None):
+        """Visualize a trajectory given as an (N, >=2) array-like."""
+        config = self.config
+        traj = np.asarray(traj, dtype=float)
         # Auto-switch visualization mode
         if 'map_image_path' in config:
             self.visualize_image(
@@ -74,9 +78,9 @@ class TrajectoryVisualizer:
         self.ax.set_title(f"Trajectory - {config.get('name', '')}")
         plt.tight_layout()
 
-        if args.output:
-            plt.savefig(args.output, dpi=150)
-            print(f"Saved to {args.output}")
+        if output:
+            plt.savefig(output, dpi=150)
+            print(f"Saved to {output}")
         else:
             plt.show()
 
